@@ -1,0 +1,38 @@
+generates:
+  src/gql/scheme/_dynamicServer.graphql:
+    schema:
+      - http://0.0.0.0:3010/graphql:
+    plugins:
+      - schema-ast
+  src/gql/types/dynamicServer.ts:
+    schema: src/gql/scheme/_dynamicServer.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      avoidOptionals: false
+      typesPrefix: I
+      enumPrefix: false
+      declarationKind:
+        type: 'interface'
+        input: 'interface'
+      scalars:
+        JSON: object
+  src/gql/scheme/_dynamicLocal.graphql:
+    schema: src/gql/scheme/gql/scheme.gql
+    plugins:
+      - schema-ast
+  src/gql/types/dynamicLocal.ts:
+    schema: src/gql/scheme/_dynamicLocal.graphql
+    plugins:
+      - typescript
+      - typescript-operations
+    config:
+      avoidOptionals: false
+      typesPrefix: I
+      enumPrefix: false
+      declarationKind:
+        type: 'interface'
+        input: 'interface'
+      scalars:
+        JSON: object

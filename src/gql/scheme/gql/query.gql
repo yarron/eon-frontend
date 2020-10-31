@@ -1,0 +1,7 @@
+# import Auth from "./auth.gql"
+# import Notification from "./notification.gql"
+
+type Query {
+  getAuth: Auth!
+  getNotifications: [Notification]!
+}

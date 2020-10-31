@@ -1,0 +1,41 @@
+type Auth {
+  email: String!
+  groups: [String]!
+}
+
+type AuthMutationResponse {
+  code: Int!
+  message: String!
+  success: Boolean!
+}
+
+type Mutation {
+  addAuth(email: String!, groups: [String]!): AuthMutationResponse
+  addNotification(message: String!, type: NotificationE!, status: Boolean!): NotifyMutationResponse!
+  deleteNotification(id: ID!): NotifyMutationResponse!
+  editNotification(id: ID!, status: Boolean!): NotifyMutationResponse!
+}
+
+type Notification {
+  id: ID!
+  message: String!
+  status: Boolean!
+  type: NotificationE!
+}
+
+enum NotificationE {
+  error
+  success
+}
+
+type NotifyMutationResponse {
+  code: Int!
+  id: ID
+  message: String!
+  success: Boolean!
+}
+
+type Query {
+  getAuth: Auth!
+  getNotifications: [Notification]!
+}

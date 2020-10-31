@@ -1,0 +1,18 @@
+type Notification {
+  message: String!
+  type: NotificationE!
+  status: Boolean!
+  id: ID!
+}
+
+enum NotificationE {
+  error
+  success
+}
+
+type NotifyMutationResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  id: ID
+}

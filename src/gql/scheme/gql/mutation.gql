@@ -1,0 +1,15 @@
+# import NotificationE, NotifyMutationResponse from "./notification.gql"
+# import AuthMutationResponse from "./auth.gql"
+
+# Mutations: Auth
+type Mutation {
+  addAuth(email: String!, groups: [String]!): AuthMutationResponse
+}
+
+# Mutations: Notification
+extend type Mutation {
+  addNotification(message: String!, type: NotificationE!, status: Boolean!): NotifyMutationResponse!
+  editNotification(id: ID!, status: Boolean!): NotifyMutationResponse!
+  deleteNotification(id: ID!): NotifyMutationResponse!
+}
+

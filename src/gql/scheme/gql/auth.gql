@@ -1,0 +1,10 @@
+type AuthMutationResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+}
+
+type Auth {
+  email: String!
+  groups: [String]!
+}

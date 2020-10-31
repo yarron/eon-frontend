@@ -1,0 +1,53 @@
+enum CacheControlScope {
+  PUBLIC
+  PRIVATE
+}
+
+type CountriesRequest {
+  nodes: [Country]
+  meta: Meta
+}
+
+type Country {
+  id: Int
+  shortName: String
+  fullName: String
+}
+
+input Login {
+  email: String
+  password: String
+  me: Boolean
+}
+
+type LoginMutationResponse implements MutationResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+  user: User
+}
+
+type Meta {
+  totalCount: Int
+}
+
+type Mutation {
+  loginAuth(login: Login): LoginMutationResponse
+}
+
+interface MutationResponse {
+  code: Int!
+  success: Boolean!
+  message: String!
+}
+
+type Query {
+  countries: CountriesRequest
+}
+
+"""The `Upload` scalar type represents a file upload."""
+scalar Upload
+
+type User {
+  email: String!
+}
