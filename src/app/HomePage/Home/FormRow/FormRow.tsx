@@ -34,6 +34,26 @@ const FormRow: FC<IProps> = ({ row, onSubmit }) => {
             errors.lastName = 'Required';
           }
 
+          if (/\s/.test(values.firstName)) {
+            errors.firstName = 'Spaces are not allowed';
+          }
+
+          if (/\s/.test(values.lastName)) {
+            errors.lastName = 'Spaces are not allowed';
+          }
+
+          if (values.phone.length > 1 && /\s/.test(values.phone)) {
+            errors.phone = 'Spaces are not allowed';
+          }
+
+          if (values.phone.length > 1 && !/^\+?\d{10,12}$/.test(values.phone)) {
+            errors.phone = 'Phone invalid format';
+          }
+
+          if (values.email.length > 1 && /\s/.test(values.email)) {
+            errors.email = 'Spaces are not allowed';
+          }
+
           if (values.email.length > 1 && !/^[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}$/i.test(values.email)) {
             errors.email = 'Invalid email address';
           }
