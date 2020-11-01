@@ -148,8 +148,6 @@ const Home: FC = () => {
           },
         });
       }
-      setIsOpenRow(false);
-      setCurrentRow(null);
     } else {
       const result = await addRow({ variables: { doc: values } });
 
@@ -162,9 +160,9 @@ const Home: FC = () => {
           },
         });
       }
-      setIsOpenRow(false);
     }
-
+    setIsOpenRow(false);
+    setCurrentRow(null);
     refetch();
   }
 
@@ -189,6 +187,7 @@ const Home: FC = () => {
 
   function handleAdd(row: any) {
     return () => {
+      setCurrentRow(null);
       setIsOpenRow(true);
     };
   }
