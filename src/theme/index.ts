@@ -114,7 +114,6 @@ const theme = createMuiTheme({
     MuiTableCell: {
       root: {
         borderBottom: '1px solid #1e1e25 !important',
-        padding: 2,
       },
       paddingCheckbox: {
         borderLeft: '2px solid #373740',

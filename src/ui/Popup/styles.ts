@@ -4,6 +4,7 @@ const useStyles = makeStyles((theme: Theme) => ({
   root: {
     margin: 0,
     padding: theme.spacing(2),
+    minWidth: 600,
   },
   actions: {
     margin: 0,
