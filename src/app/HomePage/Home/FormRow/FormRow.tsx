@@ -16,7 +16,7 @@ const FormRow: FC<IProps> = ({ row, onSubmit }) => {
     phone: row?.phone || '',
     email: row?.email || '',
     address: row?.address || '',
-    id: row?.id || 0,
+    id: row?.id || null,
   };
   const classes = useStyles();
 
@@ -56,7 +56,6 @@ const FormRow: FC<IProps> = ({ row, onSubmit }) => {
           /* and other goodies */
         }) => (
           <form onSubmit={handleSubmit} className={classes.form}>
-            {console.log(isSubmitting)}
             <TextField
               error={!!errors.firstName}
               id="firstName"

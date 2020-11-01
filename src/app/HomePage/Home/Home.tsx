@@ -11,6 +11,8 @@ import Paper from '@material-ui/core/Paper';
 import {
   mdiPencil as EditIcon,
   mdiDelete as DeleteIcon,
+  mdiPlus as AddIcon,
+  mdiRefresh as RefreshIcon,
 } from '@mdi/js';
 
 import React, {
@@ -39,10 +41,12 @@ const Home: FC = () => {
   const memoError = useCallback(setErrorByValue, []);
 
   const classes = useStyles();
-  const { data } = useQuery(GET_PHONEBOOK);
+  const {
+    data, refetch, loading: loadingGet, error: errorGet,
+  } = useQuery(GET_PHONEBOOK, { notifyOnNetworkStatusChange: true });
   const rows = data?.phonebook || [];
-  const loading = loadingAdd || loadingEdit || loadingDelete;
-  const error = errorAdd || errorEdit || errorDelete;
+  const loading = loadingAdd || loadingEdit || loadingDelete || loadingGet;
+  const error = errorAdd || errorEdit || errorDelete || errorGet;
 
   useEffect(() => {
     memoError(error?.message);
@@ -63,8 +67,20 @@ const Home: FC = () => {
             <TableCell align="left">Last Name</TableCell>
             <TableCell align="left">Phone</TableCell>
             <TableCell align="right">Email</TableCell>
-            <TableCell align="right">Address</TableCell>
-            <TableCell align="right">Action</TableCell>
+            <TableCell align="right">
+              <div>
+                <IconButton
+                  path={AddIcon}
+                  title="Add row"
+                  onClick={handleAdd(null)}
+                />
+                <IconButton
+                  path={RefreshIcon}
+                  title="Refresh records"
+                  onClick={handleRefetch}
+                />
+              </div>
+            </TableCell>
           </TableRow>
         </TableHead>
         <TableBody>
@@ -74,7 +90,6 @@ const Home: FC = () => {
               <TableCell align="left">{row.lastName}</TableCell>
               <TableCell align="left">{row.phone}</TableCell>
               <TableCell align="right">{row.email}</TableCell>
-              <TableCell align="right">{row.address}</TableCell>
               <TableCell align="right">
                 <div>
                   <IconButton
@@ -116,26 +131,15 @@ const Home: FC = () => {
     </TableContainer>
   );
 
+  function handleRefetch() {
+    refetch();
+  }
+
   async function handleSubmit(values: any) {
     if (currentRow) {
       const result = await editRow({ variables: { doc: values } });
 
       if (result?.data?.editPhonebook?.success) {
-        const cacheData = client.readQuery({ query: GET_PHONEBOOK });
-
-        const newRows = cloneDeep(cacheData.phonebook).map((row: any) => {
-          if (row.id === values.id) {
-            return values;
-          }
-          return row;
-        });
-
-        client.writeQuery({
-          query: GET_PHONEBOOK,
-          data: {
-            phonebook: newRows,
-          },
-        });
         addNotification({
           variables: {
             message: result.data.editPhonebook.message,
@@ -146,7 +150,22 @@ const Home: FC = () => {
       }
       setIsOpenRow(false);
       setCurrentRow(null);
+    } else {
+      const result = await addRow({ variables: { doc: values } });
+
+      if (result?.data?.addPhonebook?.success) {
+        addNotification({
+          variables: {
+            message: result.data.addPhonebook.message,
+            status: true,
+            type: NotificationE.Success,
+          },
+        });
+      }
+      setIsOpenRow(false);
     }
+
+    refetch();
   }
 
   function setErrorByValue(message?: string) {
@@ -168,19 +187,17 @@ const Home: FC = () => {
     };
   }
 
+  function handleAdd(row: any) {
+    return () => {
+      setIsOpenRow(true);
+    };
+  }
+
   async function handleDelete() {
     const result = await deleteRow({ variables: { id: currentId } });
 
     if (result?.data?.deletePhonebook?.success) {
-      const cacheData = client.readQuery({ query: GET_PHONEBOOK });
-
-      const newRows = cloneDeep(cacheData.phonebook).filter((row: any) => (row.id !== currentId));
-      client.writeQuery({
-        query: GET_PHONEBOOK,
-        data: {
-          phonebook: newRows,
-        },
-      });
+      refetch();
       addNotification({
         variables: {
           message: result.data.deletePhonebook.message,

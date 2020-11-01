@@ -19,6 +19,7 @@ export const ADD_PHONEBOOK = gql`
       code
       message
       success
+      id
     }
   }
 `;
